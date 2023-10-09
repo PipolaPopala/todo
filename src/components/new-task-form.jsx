@@ -1,14 +1,7 @@
 import React, {Component} from'react';
+import PropTypes from 'prop-types';
 
 export default class NewTaskForm extends Component {
-
-    state = {
-        desc: ''
-    };
-
-    onChange = (e) => {
-        this.setState({desc: e.target.value});
-    }
 
     render() {
 
@@ -17,11 +10,18 @@ export default class NewTaskForm extends Component {
         return (
         <header className="header">
             <h1>todos</h1>
-            <input className="new-todo" placeholder="What needs to be done?" autofocus
+            <input className="new-todo" placeholder="What needs to be done?" autoFocus
             onKeyUp={(e) => onAdded(e)}
-            onChange={this.onChange}
             />
         </header>
         );
     };
+};
+
+NewTaskForm.defaultProps = {
+    onAdded: () => {}
+};
+
+NewTaskForm.propTypes = {
+    onAdded: PropTypes.func
 };
