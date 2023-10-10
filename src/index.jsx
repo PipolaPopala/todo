@@ -7,8 +7,6 @@ import './components/style.css'
 import NewTaskForm from './components/new-task-form'
 import TaskList from './components/task-list'
 
-var gggg = fghj
-
 class App extends Component {
   maxId = 100
 
