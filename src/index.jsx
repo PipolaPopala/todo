@@ -13,32 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      todoData: [
-        {
-          desc: 'Completed task',
-          completed: false,
-          editing: false,
-          hidden: false,
-          date: new Date(),
-          id: 1,
-        },
-        {
-          desc: 'Editing task',
-          completed: false,
-          editing: false,
-          hidden: false,
-          date: new Date(),
-          id: 2,
-        },
-        {
-          desc: 'Active task',
-          completed: false,
-          editing: false,
-          hidden: false,
-          date: new Date(),
-          id: 3,
-        },
-      ],
+      todoData: [],
       filter: 'All',
     }
   }
@@ -56,7 +31,7 @@ class App extends Component {
   }
 
   onEdit = (e, id) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && e.target.value.trim().length > 0) {
       this.setState(({ todoData }) => {
         const idx = todoData.findIndex((el) => el.id === id)
         const oldItem = todoData[idx]
@@ -76,7 +51,7 @@ class App extends Component {
   }
 
   addItem = (e) => {
-    if (e.keyCode === 13) {
+    if (e.keyCode === 13 && e.target.value.trim().length > 0) {
       const newItem = {
         desc: e.target.value,
         completed: false,
@@ -101,6 +76,7 @@ class App extends Component {
       const newTodoData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
       return { todoData: newTodoData }
     })
+    this.filterItems()
   }
 
   onClearCompleted = () => {
@@ -168,7 +144,7 @@ class App extends Component {
           onToggleCompleted={this.onToggleCompleted}
           countTodo={countTodo}
           filter={this.state.filter}
-          changeFilter={this.changeFilter.bind(this)}
+          changeFilter={this.changeFilter}
           filterItems={this.filterItems}
           onClearCompleted={this.onClearCompleted}
         />
