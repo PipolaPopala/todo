@@ -19,7 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint 'src/**/*.jsx'",
-    "lint:fix": "eslint 'src/**/*.jsx' --fix"
+    "lint:fix": "eslint 'src/**/*.jsx' --fix",
+    "format": "prettier --write src/"
   },
   "eslintConfig": {
     "extends": [
@@ -40,7 +41,10 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/eslint-parser": "^7.22.15",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/preset-react": "^7.22.15",
     "eslint": "^8.51.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^9.0.0",
