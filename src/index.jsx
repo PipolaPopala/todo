@@ -1,11 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react' //
 import { createRoot } from 'react-dom/client'
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types' //
+
+// import App from './components/app/App';
 
 import './components/style.css'
 
-import NewTaskForm from './components/new-task-form'
-import TaskList from './components/task-list'
+import NewTaskForm from './components/newTaskForm/NewTaskForm' //
+import TaskList from './components/taskList/TaskList' //
 
 class App extends Component {
   maxId = 100
@@ -20,23 +22,26 @@ class App extends Component {
 
   editItemForm = (id) => {
     this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id)
-      const oldItem = todoData[idx]
-      if (!oldItem.completed) {
-        const newItem = { ...oldItem, editing: true }
-        const newTodoData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
-        return { todoData: newTodoData }
-      }
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id && !el.completed) {
+          return { ...el, editing: true }
+        } else {
+          return el
+        }
+      })
+      return { todoData: newTodoData }
     })
   }
 
   onEdit = (e, id) => {
     if (e.keyCode === 13 && e.target.value.trim().length > 0) {
       this.setState(({ todoData }) => {
-        const idx = todoData.findIndex((el) => el.id === id)
-        const oldItem = todoData[idx]
-        const newItem = { ...oldItem, desc: e.target.value, editing: false }
-        const newTodoData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+        const newTodoData = todoData.map((el) => {
+          if (el.id === id) {
+            return { ...el, desc: e.target.value, editing: false }
+          }
+          return el
+        })
         return { todoData: newTodoData }
       })
     }
@@ -44,8 +49,7 @@ class App extends Component {
 
   deleteItem = (id) => {
     this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id)
-      const newTodoData = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)]
+      const newTodoData = todoData.filter((el) => el.id !== id)
       return { todoData: newTodoData }
     })
   }
@@ -70,10 +74,12 @@ class App extends Component {
 
   onToggleCompleted = (id) => {
     this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id)
-      const oldItem = todoData[idx]
-      const newItem = { ...oldItem, completed: !oldItem.completed }
-      const newTodoData = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)]
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id) {
+          return { ...el, completed: !el.completed }
+        }
+        return el
+      })
       return { todoData: newTodoData }
     })
     this.filterItems()
