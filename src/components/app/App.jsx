@@ -5,7 +5,7 @@ import NewTaskForm from '../newTaskForm/NewTaskForm'
 import TaskList from '../taskList/TaskList'
 
 export default class App extends Component {
-  maxId = 100
+  maxId = 1
 
   constructor(props) {
     super(props)
@@ -58,6 +58,9 @@ export default class App extends Component {
         hidden: false,
         date: new Date(),
         id: this.maxId++,
+        minutes: 0,
+        seconds: 0,
+        timerOn: false,
       }
       this.setState(({ todoData }) => {
         const newTodoData = [...todoData, newItem]
@@ -131,6 +134,50 @@ export default class App extends Component {
     }
   }
 
+  onPlay = (id) => {
+    this.setState(({ todoData }) => {
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id) {
+          return { ...el, timerOn: true }
+        }
+        return el
+      })
+      return { todoData: newTodoData }
+    })
+    const intervalId = setInterval(() => {
+      const [{ minutes, seconds, timerOn }] = this.state.todoData.filter((el) => el.id === id)
+      if (timerOn) {
+        this.setState(({ todoData }) => {
+          const newTodoData = todoData.map((el) => {
+            if (el.id === id) {
+              if (seconds < 59) {
+                return { ...el, seconds: seconds + 1 }
+              } else {
+                return { ...el, seconds: 0, minutes: minutes + 1 }
+              }
+            }
+            return el
+          })
+          return { todoData: newTodoData }
+        })
+      } else {
+        clearInterval(intervalId)
+      }
+    }, 1000)
+  }
+
+  onPause = (id) => {
+    this.setState(({ todoData }) => {
+      const newTodoData = todoData.map((el) => {
+        if (el.id === id) {
+          return { ...el, timerOn: false }
+        }
+        return el
+      })
+      return { todoData: newTodoData }
+    })
+  }
+
   render() {
     const countTodo = this.state.todoData.filter((el) => !el.completed).length
 
@@ -148,6 +195,8 @@ export default class App extends Component {
           changeFilter={this.changeFilter}
           filterItems={this.filterItems}
           onClearCompleted={this.onClearCompleted}
+          onPlay={this.onPlay}
+          onPause={this.onPause}
         />
       </section>
     )

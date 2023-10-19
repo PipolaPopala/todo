@@ -14,6 +14,8 @@ function TaskList({
   filter,
   changeFilter,
   filterItems,
+  onPlay,
+  onPause,
 }) {
   const elements = todos.map((el) => {
     const { id, completed, editing, hidden, desc } = el
@@ -25,6 +27,8 @@ function TaskList({
           onEditForm={() => onEditForm(id)}
           onDeleted={() => onDeleted(id)}
           onToggleCompleted={() => onToggleCompleted(id)}
+          onPlay={() => onPlay(id)}
+          onPause={() => onPause(id)}
         />
         {editing ? <input type="text" className="edit" defaultValue={desc} onKeyUp={(e) => onEdit(e, id)} /> : null}
       </li>

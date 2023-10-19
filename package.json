@@ -60,7 +60,7 @@
     "prettier": "^3.0.3"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,html,css}": [
+    "*.{js,jsx,ts,tsx,css}": [
       "npx eslint --fix",
       "npx prettier --write"
     ]
