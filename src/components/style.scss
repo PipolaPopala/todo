@@ -45,6 +45,17 @@ body {
 	display: none;
 }
 
+.visually-hidden {
+	position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+}
+
 .todoapp {
 	background: #fff;
 	margin: 130px 0 40px 0;
@@ -241,6 +252,8 @@ body {
 .todo-list li label .description {
 	font-size: 13px;
 	color: gray;
+	display: flex;
+	column-gap: 5px;
 }
 
 .todo-list li label .title {

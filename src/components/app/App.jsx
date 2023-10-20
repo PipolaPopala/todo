@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 
 import NewTaskForm from '../newTaskForm/NewTaskForm'
 import TaskList from '../taskList/TaskList'
@@ -50,23 +49,29 @@ export default class App extends Component {
   }
 
   addItem = (e) => {
-    if (e.keyCode === 13 && e.target.value.trim().length > 0) {
+    e.preventDefault()
+    const title = e.target.elements.title.value
+    const min = e.target.elements.min.value
+    const sec = e.target.elements.sec.value
+    if (title.trim().length > 0) {
       const newItem = {
-        desc: e.target.value,
+        desc: title,
         completed: false,
         editing: false,
         hidden: false,
         date: new Date(),
         id: this.maxId++,
-        minutes: 0,
-        seconds: 0,
+        minutes: min,
+        seconds: sec,
         timerOn: false,
       }
       this.setState(({ todoData }) => {
         const newTodoData = [...todoData, newItem]
         return { todoData: newTodoData }
       })
-      e.target.value = ''
+      e.target.elements.title.value = ''
+      e.target.elements.min.value = ''
+      e.target.elements.sec.value = ''
     }
   }
 
@@ -74,7 +79,11 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       const newTodoData = todoData.map((el) => {
         if (el.id === id) {
-          return { ...el, completed: !el.completed }
+          if (el.completed) {
+            return { ...el, completed: !el.completed }
+          } else {
+            return { ...el, completed: !el.completed, timerOn: false }
+          }
         }
         return el
       })
@@ -135,35 +144,38 @@ export default class App extends Component {
   }
 
   onPlay = (id) => {
-    this.setState(({ todoData }) => {
-      const newTodoData = todoData.map((el) => {
-        if (el.id === id) {
-          return { ...el, timerOn: true }
-        }
-        return el
-      })
-      return { todoData: newTodoData }
-    })
-    const intervalId = setInterval(() => {
-      const [{ minutes, seconds, timerOn }] = this.state.todoData.filter((el) => el.id === id)
-      if (timerOn) {
-        this.setState(({ todoData }) => {
-          const newTodoData = todoData.map((el) => {
-            if (el.id === id) {
-              if (seconds < 59) {
-                return { ...el, seconds: seconds + 1 }
-              } else {
-                return { ...el, seconds: 0, minutes: minutes + 1 }
-              }
-            }
-            return el
-          })
-          return { todoData: newTodoData }
+    const [{ completed }] = this.state.todoData.filter((el) => el.id === id)
+    if (!completed) {
+      this.setState(({ todoData }) => {
+        const newTodoData = todoData.map((el) => {
+          if (el.id === id) {
+            return { ...el, timerOn: true }
+          }
+          return el
         })
-      } else {
-        clearInterval(intervalId)
-      }
-    }, 1000)
+        return { todoData: newTodoData }
+      })
+      const intervalId = setInterval(() => {
+        const [{ minutes, seconds, timerOn }] = this.state.todoData.filter((el) => el.id === id)
+        if (timerOn) {
+          this.setState(({ todoData }) => {
+            const newTodoData = todoData.map((el) => {
+              if (el.id === id) {
+                if (seconds > 0) {
+                  return { ...el, seconds: seconds - 1 }
+                } else if (minutes > 0) {
+                  return { ...el, seconds: 59, minutes: minutes - 1 }
+                }
+              }
+              return el
+            })
+            return { todoData: newTodoData }
+          })
+        } else {
+          clearInterval(intervalId)
+        }
+      }, 1000)
+    }
   }
 
   onPause = (id) => {
@@ -183,7 +195,7 @@ export default class App extends Component {
 
     return (
       <section className="todoapp">
-        <NewTaskForm onAdded={this.addItem} />
+        <NewTaskForm onSubmit={this.addItem} />
         <TaskList
           todos={this.state.todoData}
           onEditForm={this.editItemForm}
@@ -201,14 +213,4 @@ export default class App extends Component {
       </section>
     )
   }
-}
-
-App.defaultProps = {
-  todoData: [],
-  filter: 'All',
-}
-
-App.propTypes = {
-  todoData: PropTypes.array,
-  filter: PropTypes.string,
 }
