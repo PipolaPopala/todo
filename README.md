@@ -1,1 +1,1 @@
-Link to the deployed application - https://todo-tau-tan.vercel.app/
+Link to the deployed application - https://todo-git-tasktimer-pipolas-projects.vercel.app/
