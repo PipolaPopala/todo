@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import NewTaskForm from '../newTaskForm/NewTaskForm'
 import TaskList from '../taskList/TaskList'
+import Footer from '../footer/Footer'
 
 export default function App() {
   const [startId, setStartId] = useState(1)
@@ -139,18 +140,22 @@ export default function App() {
   return (
     <section className="todoapp">
       <NewTaskForm onSubmit={addItem} />
-      <TaskList
-        todos={todoData}
-        onEditForm={editItemForm}
-        onEdit={onEdit}
-        onDeleted={deleteItem}
-        onToggleCompleted={onToggleCompleted}
-        countTodo={countTodo}
-        filter={filter}
-        changeFilter={changeFilter}
-        filterItems={filterItems}
-        onClearCompleted={onClearCompleted}
-      />
+      <section className="main">
+        <TaskList
+          todos={todoData}
+          onEditForm={editItemForm}
+          onEdit={onEdit}
+          onDeleted={deleteItem}
+          onToggleCompleted={onToggleCompleted}
+        />
+        <Footer
+          countTodo={countTodo}
+          filter={filter}
+          changeFilter={changeFilter}
+          filterItems={filterItems}
+          onClearCompleted={onClearCompleted}
+        />
+      </section>
     </section>
   )
 }

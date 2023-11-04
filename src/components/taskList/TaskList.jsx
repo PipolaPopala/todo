@@ -1,22 +1,8 @@
 import PropTypes from 'prop-types'
 
 import Task from '../task/Task'
-import Footer from '../footer/Footer'
 
-function TaskList({
-  todos,
-  onEditForm,
-  onEdit,
-  onDeleted,
-  onToggleCompleted,
-  countTodo,
-  onClearCompleted,
-  filter,
-  changeFilter,
-  filterItems,
-  onPlay,
-  onPause,
-}) {
+function TaskList({ todos, onEditForm, onEdit, onDeleted, onToggleCompleted, onPlay, onPause }) {
   const elements = todos.map((el) => {
     const { id, completed, editing, hidden, desc } = el
 
@@ -35,18 +21,7 @@ function TaskList({
     )
   })
 
-  return (
-    <section className="main">
-      <ul className="todo-list">{elements}</ul>
-      <Footer
-        countTodo={countTodo}
-        filter={filter}
-        changeFilter={changeFilter}
-        filterItems={filterItems}
-        onClearCompleted={onClearCompleted}
-      />
-    </section>
-  )
+  return <ul className="todo-list">{elements}</ul>
 }
 
 export default TaskList
