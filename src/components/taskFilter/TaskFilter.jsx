@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types'
 
-function TaskFilter({ filter, changeFilter, filterItems }) {
+export default function TaskFilter({ filter, setFilter, filterItems }) {
+  const changeFilter = (data) => {
+    setFilter(data)
+  }
+
   return (
     <ul className="filters">
       <li>
@@ -34,16 +38,14 @@ function TaskFilter({ filter, changeFilter, filterItems }) {
   )
 }
 
-export default TaskFilter
-
 TaskFilter.defaultProps = {
   filter: 'All',
-  changeFilter: () => {},
+  setFilter: () => {},
   filterItems: () => {},
 }
 
 TaskFilter.propTypes = {
   filter: PropTypes.string,
-  changeFilter: PropTypes.func,
+  setFilter: PropTypes.func,
   filterItems: PropTypes.func,
 }

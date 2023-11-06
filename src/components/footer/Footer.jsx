@@ -2,11 +2,19 @@ import PropTypes from 'prop-types'
 
 import TaskFilter from '../taskFilter/TaskFilter'
 
-function Footer({ countTodo, onClearCompleted, changeFilter, filter, filterItems }) {
+export default function Footer({ todos, filter, filterItems, setFilter, setTodoData }) {
+  const countTodo = todos.filter((el) => !el.completed).length
+  const onClearCompleted = () => {
+    setTodoData((todoData) => {
+      const newTodoData = todoData.filter((el) => !el.completed)
+      return newTodoData
+    })
+  }
+
   return (
     <footer className="footer">
       <span className="todo-count">{countTodo} items left</span>
-      <TaskFilter filter={filter} changeFilter={changeFilter} filterItems={filterItems} />
+      <TaskFilter filter={filter} filterItems={filterItems} setFilter={setFilter} />
       <button className="clear-completed" onClick={onClearCompleted}>
         Clear completed
       </button>
@@ -14,20 +22,18 @@ function Footer({ countTodo, onClearCompleted, changeFilter, filter, filterItems
   )
 }
 
-export default Footer
-
 Footer.defaultProps = {
-  countTodo: 0,
-  onClearCompleted: () => {},
-  changeFilter: () => {},
+  todos: [],
+  setFilter: () => {},
+  setTodoData: () => {},
   filter: 'All',
   filterItems: () => {},
 }
 
 Footer.propTypes = {
-  countTodo: PropTypes.number,
-  onClearCompleted: PropTypes.func,
-  changeFilter: PropTypes.func,
+  todos: PropTypes.array,
+  setFilter: PropTypes.func,
+  setTodoData: PropTypes.func,
   filter: PropTypes.string,
   filterItems: PropTypes.func,
 }
